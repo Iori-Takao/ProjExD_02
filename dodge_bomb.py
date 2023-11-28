@@ -18,7 +18,6 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     因数：rct：こうかとん or 爆弾Surfaceのrect
     戻り値：横方向、縦方向はみ出し判定結果（画面内：True / 画面外：False）
     """
-
     yoko, tate = True, True 
     if rct.left < 0 or WIDTH < rct.right:
         yoko = False
