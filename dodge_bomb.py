@@ -79,8 +79,9 @@ def main():
                 return
             
         if kk_rct.colliderect(bb_rct):  #練習５ コウカトンrectに爆弾rectが衝突したら
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img_hit, kk_rct)  #演習3 ゲームオーバーでコウカトンなく
             pg.display.update()
-            screen.blit(kk_img_hit, kk_rct)
             time.sleep(2)
             print("Game Over")
             return 
