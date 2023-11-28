@@ -1,6 +1,7 @@
-import sys
 import pygame as pg
 import random
+import sys
+import time
 
 WIDTH, HEIGHT = 1600, 900
 
@@ -14,9 +15,9 @@ delta = {
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  
     """
-    オブジェクトが画面内or画面外を判定し　真理値タプルを返す関数
-    因数　ｒｃｔ：こうかとんｏｒ爆弾ＳＵｒｆａｃｅ　のｒｅｃｔ
-    戻り値：横方向　縦方向はみ出し判定結果　（画面内：Ｔｒｕｅ　画面外：Ｆａｌｓｅ）
+    オブジェクトが画面内or画面外を判定し、真理値タプルを返す関数
+    因数：rct：こうかとん or 爆弾Surfaceのrect
+    戻り値：横方向、縦方向はみ出し判定結果（画面内：True / 画面外：False）
     """
 
     yoko, tate = True, True 
@@ -24,7 +25,6 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         yoko = False
     if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
-
     return yoko, tate
 
 def main():
@@ -35,6 +35,32 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_rct = kk_img.get_rect()  #練習３ コウカトンのSurfaceを抽出
     kk_rct.center = 900, 400
+    kk_img_left = pg.transform.rotozoom(kk_img, 0, 1.0)
+    kk_img_upper_left = pg.transform.rotozoom(kk_img, -45, 1.0)
+    kk_img_upper = pg.transform.rotozoom(kk_img, -90, 1.0)
+    kk_img_lower_left = pg.transform.rotozoom(kk_img, 45, 1.0)
+    kk_img_lower = pg.transform.rotozoom(kk_img, 90, 1.0)
+    kk_img_upper_right = pg.transform.flip(kk_img_upper_left, True, False)
+    kk_img_lower_right = pg.transform.flip(kk_img_lower_left, True, False)
+    kk_img_right = pg.transform.flip(kk_img, True, False)
+
+    #演習１ コウカトンの各角度と回転画像の辞書
+    kk_angles = {
+        (-5, 0): kk_img,
+        (-5, -5): kk_img_upper_left,
+        (0, -5): kk_img_upper,
+        (-5, +5): kk_img_lower_left,
+        (0, +5): kk_img_lower,
+        (+5, -5): kk_img_upper_right,
+        (+5, 0): kk_img_right,
+        (+5, +5): kk_img_lower_right,
+        (0, 0): kk_img
+
+    }
+
+    kk_img_hit = pg.image.load("ex02/fig/8.png")  #演習３ 泣いたコウカトンをロード
+    kk_img_hit = pg.transform.rotozoom(kk_img_hit, 0, 2.0)
+   
 
     bb_img = pg.Surface((20, 20))  #練習１ 透明のSurfaceを作る
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)  #練習１ 赤い半径１０の円を作る
@@ -52,6 +78,9 @@ def main():
                 return
             
         if kk_rct.colliderect(bb_rct):  #練習５ コウカトンrectに爆弾rectが衝突したら
+            pg.display.update()
+            screen.blit(kk_img_hit, kk_rct)
+            time.sleep(2)
             print("Game Over")
             return 
             
@@ -68,6 +97,11 @@ def main():
 
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+
+        #演習１ コウカトンの移動方向によって各角度の画像に設定
+        for keys, values in kk_angles.items():
+            sum_mv = tuple(sum_mv)
+            kk_img = kk_angles[sum_mv]
 
         screen.blit(kk_img, kk_rct)  #練習３ こうかとんを移動させる
         bb_rct.move_ip(vx, vy)  #練習２ 爆弾を移動させる
