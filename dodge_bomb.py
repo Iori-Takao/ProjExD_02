@@ -12,7 +12,6 @@ delta = {
     pg.K_RIGHT: (+5, 0)
 }
 
-
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  
     """
     オブジェクトが画面内or画面外を判定し、真理値タプルを返す関数
@@ -26,6 +25,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
     return yoko, tate
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
