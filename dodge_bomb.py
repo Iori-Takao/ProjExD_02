@@ -51,6 +51,10 @@ def main():
             if event.type == pg.QUIT: 
                 return
             
+        if kk_rct.colliderect(bb_rct):  #練習５ コウカトンrectに爆弾rectが衝突したら
+            print("Game Over")
+            return 
+            
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
 
