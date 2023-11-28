@@ -69,6 +69,7 @@ def main():
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5  #練習２ 爆弾の速度
+    accs = [a for a in range(1, 11)]  #演習２ 加速度のリスト
 
     clock = pg.time.Clock()
     tmr = 0
@@ -103,8 +104,10 @@ def main():
             sum_mv = tuple(sum_mv)
             kk_img = kk_angles[sum_mv]
 
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]  #演習２ tmrの値に応じて速度を変更
         screen.blit(kk_img, kk_rct)  #練習３ こうかとんを移動させる
-        bb_rct.move_ip(vx, vy)  #練習２ 爆弾を移動させる
+        #bb_rct.move_ip(vx, vy)  #練習２ 爆弾を移動させる
+        bb_rct.move_ip(avx, avy)
 
         yoko, tate = check_bound(bb_rct)
         if not yoko:  #横方向にはみ出たら
